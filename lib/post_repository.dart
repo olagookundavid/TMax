@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:tmax/post_model.dart';
 
 class PostsRepository {
-  final Dio _dio;
+  final Dio _dio = Dio();
 
-  PostsRepository(this._dio);
+  // PostsRepository(this._dio);
 
   Future<ApiResponse<List<Posts>>> getPosts() async {
     final response =
@@ -18,6 +18,12 @@ class PostsRepository {
         data: posts,
         message: "Posts fetched successfully",
       );
+    } else if (response.statusCode == 400) {
+      return ApiResponse(
+        success: false,
+        data: null,
+        message: "Auth error",
+      );
     }
     return ApiResponse(
       success: false,
@@ -27,6 +33,7 @@ class PostsRepository {
   }
 }
 
+//convience class
 class ApiResponse<T> {
   final bool success;
   final T? data;

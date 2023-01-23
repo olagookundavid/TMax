@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:tmax/post_model.dart';
 import 'package:tmax/post_repository.dart';
@@ -12,10 +11,11 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   List<Posts> posts = [];
-  final postRepository = PostsRepository(Dio());
+  final postRepository = PostsRepository();
   NetworkState stateOfNetwork = NetworkState.loading;
   String errorMessage = '';
 
+//widget lifecycle
   @override
   void initState() {
     super.initState();
@@ -23,16 +23,18 @@ class _MainViewState extends State<MainView> {
   }
 
   getPosts() async {
-    final apiResponse = await postRepository.getPosts();
+    final ApiResponse<List<Posts>> apiResponse =
+        await postRepository.getPosts();
     if (apiResponse.success) {
       posts = apiResponse.data!;
       stateOfNetwork = NetworkState.success;
       setState(() {});
       return;
+    } else {
+      errorMessage = apiResponse.message;
+      stateOfNetwork = NetworkState.error;
+      setState(() {});
     }
-    errorMessage = apiResponse.message;
-    stateOfNetwork = NetworkState.error;
-    setState(() {});
   }
 
   @override
@@ -45,6 +47,11 @@ class _MainViewState extends State<MainView> {
         ),
         centerTitle: true,
       ),
+/*
+itenery operator
+2 + 2 == 4 ? yes : no
+*/
+
       body: stateOfNetwork == NetworkState.loading
           ? const Center(child: CircularProgressIndicator.adaptive())
           : stateOfNetwork == NetworkState.error

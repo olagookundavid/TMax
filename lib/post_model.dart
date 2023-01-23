@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-Posts postsFromJson(String str) => Posts.fromJson(json.decode(str));
+// Posts postsFrommap(String str) => Posts.fromJson(json.decode(str));
 
 class Posts {
   Posts({
@@ -15,10 +13,10 @@ class Posts {
   final String? title;
   final String? body;
 
-  factory Posts.fromJson(Map<String, dynamic> json) => Posts(
-        userId: json["userId"],
-        id: json["id"],
-        title: json["title"],
-        body: json["body"],
+  factory Posts.fromJson(Map<String, dynamic> map) => Posts(
+        userId: map["userId"],
+        id: map["id"],
+        title: map["title"],
+        body: map["body"],
       );
 }
