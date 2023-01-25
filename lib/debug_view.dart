@@ -1,6 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:tmax/api_response.dart';
+import 'package:tmax/constants.dart';
+import 'package:tmax/details_screen.dart';
 import 'package:tmax/post_model.dart';
 import 'package:tmax/post_repository.dart';
+import 'package:tmax/text_helper.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -11,7 +16,7 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   List<Posts> posts = [];
-  final postRepository = PostsRepository();
+  final postRepository = PostsRepository(Dio());
   NetworkState stateOfNetwork = NetworkState.loading;
   String errorMessage = '';
 
@@ -42,7 +47,7 @@ class _MainViewState extends State<MainView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Debugging",
+          "Post App",
           style: TextStyle(fontSize: 20),
         ),
         centerTitle: true,
@@ -56,22 +61,42 @@ itenery operator
           ? const Center(child: CircularProgressIndicator.adaptive())
           : stateOfNetwork == NetworkState.error
               ? Center(
-                  child: Text(errorMessage),
+                  child: Text(
+                    errorMessage,
+                    style: const TextStyle(color: Colors.black, fontSize: 25),
+                  ),
                 )
               : ListView.builder(
                   itemCount: posts.length,
-                  shrinkWrap: true,
+                  // shrinkWrap: true,
                   itemBuilder: (context, index) {
                     final post = posts[index];
                     return ListTile(
-                      leading: const CircleAvatar(),
-                      title: Text(post.title ?? ""),
-                      subtitle: Column(
-                        children: [
-                          Text(post.body ?? ""),
-                          Text("${post.userId}"),
-                        ],
+                      leading: CircleAvatar(
+                        child: TextHelper(
+                            text: "${index + 1}",
+                            color: Colors.white,
+                            size: 12),
                       ),
+                      title: TextHelper(
+                          text: post.title ?? '',
+                          color: Colors.orange,
+                          size: 25),
+                      subtitle: TextHelper(
+                        text: post.body!,
+                        color: Colors.yellow,
+                        size: 15,
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) => DetailName(
+                                post: post,
+                                index: index,
+                              ),
+                            ));
+                      },
                     );
                   },
                 ),

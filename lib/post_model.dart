@@ -1,5 +1,3 @@
-// Posts postsFrommap(String str) => Posts.fromJson(json.decode(str));
-
 class Posts {
   Posts({
     required this.userId,

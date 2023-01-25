@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tmax/constants.dart';
 import 'package:tmax/debug_view.dart';
 
 main() {
@@ -11,7 +12,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Api calls',
+      debugShowCheckedModeBanner: false,
+      title: AppStrings.appName,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
